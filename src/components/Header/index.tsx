@@ -18,12 +18,6 @@ const Header = () => {
                         Login
                     </Link>
                 </li>
-                <li>
-                    <Link to="/products" className="flex items-center">
-                        <FaShoppingCart className="mr-1" />
-                        Produtos
-                    </Link>
-                </li>
             </ul>
         </header>
     );
