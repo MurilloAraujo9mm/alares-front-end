@@ -1,0 +1,26 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import "~slick-carousel/slick/slick.css"; 
+@import "~slick-carousel/slick/slick-theme.css";
+
+.slick-slide {
+    margin: 0 !important;
+}
+
+
+.slider-container {
+    width: 70%; 
+    max-width: 950px;
+    margin: 0 auto;
+    border-radius: 10px;
+    overflow: hidden;
+
+    @media (max-width: 1024px) {
+        width: 85%; // era 90%
+    }
+
+    @media (max-width: 640px) {
+        width: 95%; // era 100%
+    }
+}
