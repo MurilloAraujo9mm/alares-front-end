@@ -8,7 +8,6 @@
     margin: 0 !important;
 }
 
-
 .slider-container {
     width: 70%; 
     max-width: 950px;
@@ -17,10 +16,10 @@
     overflow: hidden;
 
     @media (max-width: 1024px) {
-        width: 85%; // era 90%
+        width: 85%; 
     }
 
     @media (max-width: 640px) {
-        width: 95%; // era 100%
+        width: 95%;
     }
 }
