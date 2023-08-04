@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaTimes, FaCheck, FaExclamationCircle, FaUser, FaPhone, FaEnvelope } from 'react-icons/fa';
-import './index.scss';
+import { FaTimes, FaCheck, FaUser, FaPhone, FaEnvelope } from 'react-icons/fa';
 import { planController } from '../../services/api';
+import './index.scss';
 
 interface UserInfoModalProps {
     isOpen: boolean;
     onClose: () => void;
+    selectedPlanId?: number | null;
 }
 
-const UserInfoModal: React.FC<UserInfoModalProps> = ({ isOpen, onClose }) => {
+const UserInfoModal: React.FC<UserInfoModalProps> = ({ isOpen, onClose, selectedPlanId }) => {
     const [showSpinner, setShowSpinner] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
@@ -35,7 +36,7 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({ isOpen, onClose }) => {
 
         setIsLoading(true);
 
-        await new Promise((resolve) => setTimeout(resolve, 1500));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
         const formData = new FormData(formRef.current!);
 
@@ -46,27 +47,38 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({ isOpen, onClose }) => {
         };
 
         try {
-            await planController.createUser(userData);
+            if (selectedPlanId) {
+
+                const createdUser = await planController.createUser(userData);
+                const orderData = {
+                    id_user: createdUser.id_user,
+                    id_plan: selectedPlanId,
+                };
+                await planController.createOrder(orderData);
+            }
+
             setShowSuccessMessage(true);
         } catch (error) {
             console.error('Falha ao criar usuário.', error);
         } finally {
             setIsLoading(false);
         }
+
+
     };
 
     return (
         <div className={`modal-overlay ${showModal ? 'active' : ''}`}>
-            {showSpinner && <div className="spinner"></div>}
-            {isLoading && <div className="loading-bar"></div>}
             {showModal && (
                 <div className="modal-content">
-                    <button onClick={onClose} className="absolute top-2 right-2 text-gray-700 hover:text-gray-900">
-                        <FaTimes className="h-6 w-6" />
-                    </button>
+
                     <h2 className="text-2xl font-bold mb-4">Contrate um plano</h2>
                     {!showSuccessMessage ? (
-                        <form ref={formRef} className="space-y-4" onSubmit={handleSubmit}>
+                        <form ref={formRef} className="space-y-4 relative" onSubmit={handleSubmit}>
+                            <button onClick={onClose} className="absolute top-[-60px] right-[-10px] text-gray-700 hover:text-gray-900">
+                                <FaTimes className="h-6 w-6" />
+                            </button>
+
                             <div className="flex flex-col">
                                 <label htmlFor="userName" className="text-md font-medium mb-1 flex items-center">
                                     <FaUser className="mr-2" />
