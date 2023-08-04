@@ -9,24 +9,46 @@ interface UserInfoModalProps {
     selectedPlanId?: number | null;
 }
 
+interface SuccessMessageProps {
+    message: string;
+    onClose: () => void;
+}
+
 const UserInfoModal: React.FC<UserInfoModalProps> = ({ isOpen, onClose, selectedPlanId }) => {
-    const [showSpinner, setShowSpinner] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-
     const formRef = useRef<HTMLFormElement>(null);
+    
+    const SuccessMessage: React.FC<SuccessMessageProps> = ({ message, onClose }) => {
+        useEffect(() => {
+            const timer = setTimeout(() => {
+                onClose();
+            }, 2000);
+
+            return () => {
+                clearTimeout(timer);
+            };
+        }, [onClose]);
+
+        return (
+            <div className="flex items-center text-green-700">
+                <FaCheck className="mr-2" />
+                <span>{message}</span>
+            </div>
+        );
+    };
+
 
     useEffect(() => {
         if (isOpen) {
-            setShowSpinner(true);
+
             setTimeout(() => {
                 setShowModal(true);
-                setShowSpinner(false);
+
             }, 1000);
         } else {
             setShowModal(false);
-            setShowSpinner(false);
             setShowSuccessMessage(false);
         }
     }, [isOpen]);
@@ -40,21 +62,19 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({ isOpen, onClose, selected
 
         const formData = new FormData(formRef.current!);
 
-        const userData = {
-            first_name: formData.get('userName'),
-            phone: formData.get('userPhone'),
-            email: formData.get('userEmail'),
-        };
-
         try {
             if (selectedPlanId) {
 
-                const createdUser = await planController.createUser(userData);
-                const orderData = {
+                const createdUser = await planController.createUser({
+                    first_name: formData.get('userName'),
+                    phone: formData.get('userPhone'),
+                    email: formData.get('userEmail')
+                });
+
+                await planController.createOrder({
                     id_user: createdUser.id_user,
-                    id_plan: selectedPlanId,
-                };
-                await planController.createOrder(orderData);
+                    id_plan: selectedPlanId
+                });
             }
 
             setShowSuccessMessage(true);
@@ -71,11 +91,11 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({ isOpen, onClose, selected
         <div className={`modal-overlay ${showModal ? 'active' : ''}`}>
             {showModal && (
                 <div className="modal-content">
-
-                    <h2 className="text-2xl font-bold mb-4">Contrate um plano</h2>
                     {!showSuccessMessage ? (
                         <form ref={formRef} className="space-y-4 relative" onSubmit={handleSubmit}>
-                            <button onClick={onClose} className="absolute top-[-60px] right-[-10px] text-gray-700 hover:text-gray-900">
+                            <h2 className="text-2xl font-bold mb-4">Contrate um plano</h2>
+
+                            <button onClick={onClose} className="absolute top-[-30px] right-[-10px] text-gray-700 hover:text-gray-900">
                                 <FaTimes className="h-6 w-6" />
                             </button>
 
@@ -110,10 +130,10 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({ isOpen, onClose, selected
                             </div>
                         </form>
                     ) : (
-                        <div className="bg-green-100 text-green-700 p-4 rounded-md mb-4 w-full">
-                            <FaCheck className="mr-2" />
-                            Plano contratado com sucesso
-                        </div>
+                        <SuccessMessage
+                            message="Plano contratado com sucesso"
+                            onClose={() => setShowSuccessMessage(false)}
+                        />
                     )}
                 </div>
             )}

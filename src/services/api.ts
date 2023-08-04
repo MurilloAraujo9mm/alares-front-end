@@ -1,4 +1,3 @@
-// src/services/api.ts
 import axios from 'axios';
 
 const api = axios.create({
@@ -40,8 +39,6 @@ export const planController = {
   },
 
   createOrder: async (orderData: any) => {
-    
-
     try {
       const response = await api.post('/orders/create', orderData);
       return response.data;
@@ -59,25 +56,20 @@ export const planController = {
     }
   },
 
-
-  update: async (id: number, updatedData: any) => {  // Substitua "any" pelo tipo do plano se você tiver definido um
+  auth: async (username: any, password: any): Promise<any> => {   
     try {
-      const response = await api.put(`/endpoint-dos-planos/${id}`, updatedData);
-      return response.data;
+      const response = await api.post('/auth/login',  {
+        username,
+        password
+      });      
+
+      
+      return response;
+      
     } catch (error) {
-      throw error;
+       return error;
     }
   },
-
-  delete: async (id: number) => {
-    try {
-      const response = await api.delete(`/endpoint-dos-planos/${id}`);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  },
-
 };
 
 export default api;

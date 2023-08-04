@@ -1,30 +1,28 @@
 import React, { useState } from 'react';
 import { FaUser, FaLock, FaExclamationCircle } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import { login } from '../auth/auth';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [username, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  
+  
 
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!email || !password) {
-      setError('Preencha todos os campos.');
-      return;
+    try {
+      const loginResult = await login(username, password);
+      if (loginResult) {
+        window.location.href = '/dashboard';
+      }
+    } catch (error) {
+      // Se for uma instância de erro, use a mensagem de erro. Caso contrário, use uma mensagem genérica.
+      setError(error instanceof Error ? error.message : 'Erro ao realizar o login');
     }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setError('Por favor, digite um email válido.');
-      return;
-    }
-
-    if (email === 'usuario@example.com' && password === '123456') {
-      console.log('Login bem-sucedido');
-    } else {
-      setError('Email ou senha incorretos');
-    }
+    
   };
 
   return (
@@ -43,12 +41,12 @@ const Login = () => {
               <FaUser className="text-gray-500" />
             </span>
             <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="Email"
+              type="text"
+              id="username"
+              name="username"
+              placeholder="Usuario"
               className="border-none focus:outline-none flex-1 py-3 px-4 rounded-md"
-              value={email}
+              value={username}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
