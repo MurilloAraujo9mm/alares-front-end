@@ -2,11 +2,10 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://suaapi.com',
+  baseURL: 'http://localhost:4000',
   timeout: 10000, 
   headers: {
     'Content-Type': 'application/json',
-    // "Authorization": "Bearer " + token (se tiver token de autenticação)
   },
 });
 
@@ -29,14 +28,35 @@ export const planController = {
     }
   },
 
-  create: async (planData: any) => {   // Substitua "any" pelo tipo do plano se você tiver definido um
+  createUser: async (userData: any) => {   
     try {
-      const response = await api.post('/endpoint-dos-planos', planData);
+      const response = await api.post('/users/create', userData);
+      console.log(response);
+      
       return response.data;
     } catch (error) {
       throw error;
     }
   },
+
+  createOrder: async (orderData: any) => {
+    try {
+      const response = await api.post('/orders/create', orderData);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  plans: async () => {   
+    try {
+      const response = await api.get('/plans');      
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
 
   update: async (id: number, updatedData: any) => {  // Substitua "any" pelo tipo do plano se você tiver definido um
     try {
