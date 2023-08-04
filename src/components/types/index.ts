@@ -1,5 +1,7 @@
 export interface IPlan {
-    name: string;
-    speed: string;
-    features: string[];
+
+    name_plan: any;
+    price: any;
+    id_plan: number;
+    details: any;
 }
