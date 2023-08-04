@@ -14,7 +14,6 @@ const Login = () => {
       return;
     }
 
-    // Regex para validar o formato de email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setError('Por favor, digite um email válido.');
