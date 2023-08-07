@@ -16,6 +16,11 @@ const Login = () => {
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!username || !password) {
+      setError('Informe username ou password');
+      return;
+    }
+
     try {
       const loginResult = await login(username, password);
       if (loginResult) {
