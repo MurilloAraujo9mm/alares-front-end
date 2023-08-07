@@ -9,21 +9,20 @@
 }
 
 .slider-container {
-    width: 70%; 
+    position: relative;
     max-width: 950px;
-    margin: 0 auto;
-    border-radius: 10px;
-    overflow: hidden;
-
-    @media (max-width: 1024px) {
-        width: 85%; 
-    }
-
-    @media (max-width: 640px) {
-        width: 95%;
-    }
-
+    width: 100%;
     @media (max-width: 1400px) {
-        width: 80%;
+        .slider-container {
+            width: 85%;
+            margin: 10px;
+        }
+    }
+    
+    @media (max-width: 640px) {
+        .slider-container {
+            width: 75%;
+            margin: 20px; 
+        }
     }
 }
