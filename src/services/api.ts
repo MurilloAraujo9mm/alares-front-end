@@ -120,6 +120,23 @@ export const planController = {
        return error;
     }
   },
+
+  authCreate: async (username: any, password: any, email: any): Promise<any> => {   
+    try {
+      const response = await api.post('/auth/create',  {
+        username,
+        password,
+        email
+      });      
+      
+      return response;
+      
+    } catch (error) {
+       return error;
+    }
+  },
+
+  
 };
 
 export default api;
