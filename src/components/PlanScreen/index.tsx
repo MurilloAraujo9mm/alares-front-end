@@ -5,8 +5,14 @@ import PlanCard from '../PlanCard';
 import Slider from 'react-slick';
 import { IPlan } from '../types';
 import { planController } from '../../services/api';
+import { BsArrowRight, BsArrowLeft } from 'react-icons/bs';
 import './index.scss';
-import Header from '../Header';
+
+type ArrowProps = {
+    className?: string;
+    style?: React.CSSProperties;
+    onClick?: React.MouseEventHandler<HTMLDivElement>;
+};
 
 const PlanScreen: React.FC = () => {
     const [isModalOpen, setModalOpen] = useState(false);
@@ -35,6 +41,8 @@ const PlanScreen: React.FC = () => {
         setSelectedPlanId(planId);
         setModalOpen(true);
     };
+
+
 
     return (
         <>
