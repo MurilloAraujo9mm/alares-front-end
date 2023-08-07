@@ -8,18 +8,17 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   
-  
-
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
       const loginResult = await login(username, password);
       if (loginResult) {
-        window.location.href = '/dashboard';
+        window.location.href = '/dashboard/orders';
+      } else {
+        setError("Credenciais inválidas");
       }
     } catch (error) {
-      // Se for uma instância de erro, use a mensagem de erro. Caso contrário, use uma mensagem genérica.
       setError(error instanceof Error ? error.message : 'Erro ao realizar o login');
     }
     

@@ -1,0 +1,11 @@
+.dashboard {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .dashboard-content {
+    max-width: 1000px;
+    margin-left: 256px; 
+    flex-grow: 1;
+  }
+  
